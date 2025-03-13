@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="NAR: Neighboring Autoregressive Modeling for Efficient Visual Generation.">
+  <meta name="keywords" content="Efficient Visual Generation, Autoregressive Visual Generation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neighboring Autoregressive Modeling for Efficient Visual Generation</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- <link rel="icon" href="./static/images/xxx.svg"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title"><span class="highlight">N</span>eighboring <span class="highlight">A</span>uto<span class="highlight">R</span>egressive Modeling for Efficient Visual Generation</h1>
+          <!-- 作者 -->
+          <!-- <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://keunhong.com">Keunhong Park</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://utkarshsinha.com">Utkarsh Sinha</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://jonbarron.info">Jonathan T. Barron</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://sofienbouaziz.com">Sofien Bouaziz</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.danbgoldman.com">Dan B Goldman</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://homes.cs.washington.edu/~seitz/">Steven M. Seitz</a><sup>1,2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://www.ricardomartinbrualla.com">Ricardo Martin-Brualla</a><sup>2</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Washington,</span>
+            <span class="author-block"><sup>2</sup>Google Research</span>
+          </div> -->
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://youtu.be/pnHADYVLuO4"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <!-- <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/videos/teaser.mp4"
+                type="video/mp4">
+      </video> -->
+      <img src="./static/images/teaser.png"
+                 class="interpolation-image"
+                 alt="Interpolate start reference image."/>
+      <h2 class="subtitle has-text-centered">
+        Figure 1. <b>Generated samples from NAR.</b> Results are shown for 512 × 512 text-guided image generation (1st row), 256 × 256 class-
+        conditional image generation (2nd row) and 128 × 128 class-conditional video generation (3rd row)
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Visual autoregressive models typically adhere to a raster-order <i>"next-token prediction"</i> paradigm, which overlooks the spatial and temporal locality inherent in visual content. 
+            Specifically, visual tokens exhibit significantly stronger correlations with their spatially or temporally adjacent tokens compared to those that are distant.
+          </p>
+          <p>
+            In this paper, we propose Neighboring Autoregressive Modeling (<b>NAR</b>), a novel paradigm that formulates autoregressive visual generation as a progressive outpainting procedure, following a near-to-far <i>"next-neighbor prediction"</i> mechanism.
+            Starting from an initial token, the remaining tokens are decoded in ascending order of their Manhattan distance from the initial token in the spatial-temporal space, progressively expanding the boundary of the decoded region.
+            To enable parallel prediction of multiple adjacent tokens in the spatial-temporal space, we introduce a set of dimension-oriented decoding heads, each predicting the next token along a mutually orthogonal dimension.
+          </p>
+          <p>
+            During inference, all tokens adjacent to the decoded tokens are processed in parallel, substantially reducing the model forward steps for generation.
+            Experiments on ImageNet 256 x 256 and UCF101 demonstrate that NAR achieves <b><i>2.4x</i></b> and <b><i>8.6x</i></b> higher throughput respectively, while obtaining superior FID/FVD scores for both image and video generation tasks compared to the PAR-4X approach.
+            When evaluating on text-to-image generation benchmark GenEval, NAR with 0.8B parameters outperforms Chameleon-7B while using merely <b><i>0.4%</i></b> of the training data.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/pnHADYVLuO4?si=uH18jXOtjZs2Kdiu"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-full-width is-centered method-title">
+      <h2 class="title is-3">Method</h2>
+    </div>
+
+    <div class="columns is-centered method-comparision">
+      <div class="column is-four-fifths">
+        <img src="./static/images/method.png"
+                 alt="Method comparision."/>
+        <h2 class="subtitle has-text-centered">
+          Figure 2. <b>Comparisons of different autoregressive visual generation paradigm.</b> The proposed NAR paradigm formulates the generation process as an outpainting procedure, progressively expanding the boundary of the decoded token region. This approach effectively
+          preserves locality, as all tokens near the starting point are consistently decoded before the current token.
+        </h2>
+      </div>
+    </div>
+
+    <div class="columns method-video">
+      <!-- 2D. -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title">(1) Image</h3>
+          <p>
+            An image can be considered two-dimensional, allowing decoding to proceed along two orthogonal dimensions: rows and columns.
+          </p>
+          <br>
+          <video id="dollyzoom" autoplay muted loop playsinline height="100%">
+            <source src="./static/videos/2d.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ 2D. -->
+
+      <!-- 3D. -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title">(2) Video</h3>
+          <p>
+            Videos can be regarded as three-dimensional, adding a temporal dimension to images, decoding can be performed along three orthogonal dimensions: times, rows, and columns.
+          </p>
+          <video id="dollyzoom" autoplay muted loop playsinline height="100%">
+            <source src="./static/videos/3d.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!--/ 3D. -->
+
+    </div>
+  </div>
+</section>
+
+
+<section class="section" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Visualizations</h2>
+
+        <div class="navbar-menu visualizaion-choices">
+
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link current-visualization-tag">
+              Class to Image 
+            </a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item visualization-tag">
+                Class to Video
+              </a>
+              <a class="navbar-item visualization-tag">
+                Class to Image
+              </a>
+              <a class="navbar-item visualization-tag">
+                Text to Image
+              </a>
+            </div>
+          </div>
+
+        </div>
+        
+        <div class="content has-text-justified">
+          <p class="current-introduction">
+            <b> Video generation samples </b> on UCF-101 dataset. Each row shows sampled frames from a 16-frame, 128 × 128 resolution
+            sequence generated by NAR-XL across various action categories.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered current-visualization">
+      <!-- class to video -->
+      <!-- class to image -->
+      <div class="column c2i">
+        <img src="./static/images/c2i_1.png"
+                alt="C2I visualization."/>
+      </div>
+
+      <div class="column c2i">
+        <img src="./static/images/c2i_2.png"
+                alt="C2I visualization."/>
+      </div>
+      <!-- text to image -->
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop results">
+
+    <div class="columns is-full-width is-centered method-title">
+      <h2 class="title is-3">Results</h2>
+    </div>
+
+    <div class="columns is-centered method-comparision">
+      <div class="column is-four-fifths">
+        <img src="./static/images/c2i_table.png"
+                 alt="Method comparision."/>
+        <h2 class="subtitle has-text-centered">
+          Table 1. Quantitative evaluation on the ImageNet 256 × 256 benchmark. “Step” denotes the number of model forward passes required to
+          generate an image. The throughput is measured with the maximum batch size supported on a single A100 GPU. Classifier-free guidance
+          is set to 2 for our method. We also report the reconstruction FID (rFID) of visual tokenizers for each method, which serves as an upper
+          bound for generation FID. †: model denoted as M shares the same hidden dimension as the L model but is reduced by 6 layers in depth.
+        </h2>
+      </div>
+    </div>
+    <br>
+
+    <div class="columns is-centered method-comparision">
+      <div class="column is-four-fifths c2v-section">
+        <img src="./static/images/c2v_table.png"
+                 alt="Method comparision."
+                 class="c2v-table" />
+        <h2 class="subtitle has-text-centered">
+          Table 2. Comparison of class-conditional video generation meth-
+          ods on UCF-101 benchmark. Classifier-free guidance is set to 1.25
+          for all variants of our method. †: model denoted as LP shares the
+          same hidden dimension as the XL model but is reduced by 6 layers
+          in depth.
+        </h2>
+      </div>
+    </div>
+    <br>
+
+    <div class="columns is-centered method-comparision">
+      <div class="column is-four-fifths">
+        <img src="./static/images/t2i_table.png"
+                 alt="Method comparision."/>
+        <h2 class="subtitle has-text-centered">
+          Table 3. Quantitative evaluation on the GenEval benchmark.
+        </h2>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code></code></pre>
+    <!-- <pre><code>@article{park2021nerfies,
+  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
+  title     = {Nerfies: Deformable Neural Radiance Fields},
+  journal   = {ICCV},
+  year      = {2021},
+}</code></pre> -->
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            The website template is sourced from <a
+              href="https://nerfies.github.io/">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

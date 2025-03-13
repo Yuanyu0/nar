@@ -193,3 +193,7 @@ body {
   position: relative;
   left: 20%;
 }
+
+.results img {
+  margin-top: -1rem;
+}

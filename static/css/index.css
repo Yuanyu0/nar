@@ -20,6 +20,7 @@ body {
 
 .teaser {
   font-family: 'Google Sans', sans-serif;
+  margin-top: -1rem;
 }
 
 .teaser .subtitle {
@@ -66,7 +67,7 @@ body {
 }
 
 .publication-authors a {
-   color: hsl(204, 86%, 53%) !important;
+   color: #D12C25 !important;
 }
 
 .publication-authors a:hover {

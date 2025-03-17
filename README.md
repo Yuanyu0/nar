@@ -1,0 +1,1 @@
+🔥 The website demo for "Neighboring Autoregressive Modeling for Efficient Visual Generation"
